@@ -112,7 +112,7 @@ Let's run the Spring Petclinic application. in a CodeReady Terminal:
 
 [source,sh,role="copypaste"]
 ----
-mvn spring-boot:run -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/spring-petclinic
+mvn spring-boot:run -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/spring-petclinic
 ----
 
 [NOTE]
