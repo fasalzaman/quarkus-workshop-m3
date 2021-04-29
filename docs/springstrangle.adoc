@@ -72,7 +72,7 @@ Open a new CodeReady Workspaces Terminal and run the following commands to run t
 
 [source,console,role="copypaste"]
 ----
-mvn quarkus:dev -Ddebug=7005 -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
+mvn quarkus:dev -Ddebug=7005 -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
 ----
 
 [NOTE]
@@ -127,7 +127,7 @@ Add _quarkus-rest-client_ and _quarkus-resteasy-jackson_ extension in CodeReady 
 
 [source,sh,role="copypaste"]
 ----
-mvn -q quarkus:add-extension -Dextensions="rest-client,resteasy-jackson" -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic
+mvn -q quarkus:add-extension -Dextensions="rest-client,resteasy-jackson" -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic
 ----
 
 You should see in the output:
@@ -436,7 +436,7 @@ Build and deploy the `people` application via running the following maven plugin
 
 [source,sh,role="copypaste"]
 ----
-mvn clean package -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
+mvn clean package -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
 ----
 
 **Wait for it to finish!**. You should get a **BUILD SUCCESS** message at the end. Once that's done, make sure it's actually done rolling out:
