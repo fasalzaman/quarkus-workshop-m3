@@ -72,7 +72,7 @@ Open a new CodeReady Workspaces Terminal and run the following commands to run t
 
 [source,console,role="copypaste"]
 ----
-mvn quarkus:dev -Ddebug=7005 -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
+mvn quarkus:dev -Ddebug=7005 -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
 ----
 
 [NOTE]
@@ -127,7 +127,7 @@ Add _quarkus-rest-client_ and _quarkus-resteasy-jackson_ extension in CodeReady 
 
 [source,sh,role="copypaste"]
 ----
-mvn -q quarkus:add-extension -Dextensions="rest-client,resteasy-jackson" -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic
+mvn -q quarkus:add-extension -Dextensions="rest-client,resteasy-jackson" -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic
 ----
 
 You should see in the output:
@@ -318,38 +318,22 @@ image::remain-microservices.png[quarkus, 600]
 
 == Deploy to PostgreSQL in Production
 
-Our production environment needs a "real" database so let's deploy a Postgres database to OpenShift. Login with your assigned username and password (e.g. `{{ USER_ID }}/{{ OPENSHIFT_USER_PASSWORD }}`) in the {{ CONSOLE_URL}}[OpenShift Console^]:
+Our production environment needs a "real" database so let's update the Postgres database connection details (JDBC url, database credentials) which are specified in `application.properties`. So you'll update the below details now:
 
-image::ocplogin.png[login,700]
+[source,shell,role="copypaste"]
+----
+%prod.quarkus.datasource.url=jdbc:postgresql://coolstore1.postgres.database.azure.com:5432/vets
+%prod.quarkus.datasource.driver=org.postgresql.Driver
+%prod.quarkus.datasource.username=demouser@coolstore1
+%prod.quarkus.datasource.password=demo@pass123
+%prod.quarkus.datasource.max-size=8
+%prod.quarkus.datasource.min-size=2
+%prod.quarkus.hibernate-orm.database.generation=drop-and-create
+%prod.quarkus.hibernate-orm.sql-load-script=import.sql
+%prod.quarkus.hibernate-orm.log.sql=true
+----
 
-Once logged in, click on the name of your project (`{{ USER_ID }}-project`):
-
-image::ocpproj.png[project,700]
-
-Switch to the _Developer Perspective_ (if not already on it) using the upper-left drop-down:
-
-image::devperspective.png[perspective, 700]
-
-click **+Add** on the left, on the _Database_ box on the project overview:
-
-image::db.png[db, 700]
-
-Type in `postgres` in the search box, and click on the *PostgreSQL (ephemeral)*:
-
-image::db-postgres.png[db, 700]
-
-Click on *Instantiate Template* and fill in the following fields, leaving the others as their default values:
-
-* **Namespace** (the first one): Select `{{ USER_ID }}-project`
-* **Namespace** (the _second_ one): `openshift`
-* **Database Service Name**: `vets-database`
-* **PostgreSQL Connection Username**: `vets`
-* **PostgreSQL Connection Password**: `mysecretpassword`
-* **PostgreSQL Database Name**: `vets`
-
-image::db-postgres-values.png[db, 700]
-
-Click *Create*. 
+By this you will connect the database to our new project. 
 
 == Login to OpenShift
 
@@ -404,16 +388,6 @@ Append the following variables in `src/main/resources/application.properties` wi
 
 [source,shell,role="copypaste"]
 ----
-%prod.quarkus.datasource.url=jdbc:postgresql://vets-database:5432/vets
-%prod.quarkus.datasource.driver=org.postgresql.Driver
-%prod.quarkus.datasource.username=vets
-%prod.quarkus.datasource.password=mysecretpassword
-%prod.quarkus.datasource.max-size=8
-%prod.quarkus.datasource.min-size=2
-%prod.quarkus.hibernate-orm.database.generation=drop-and-create
-%prod.quarkus.hibernate-orm.sql-load-script=import.sql
-%prod.quarkus.hibernate-orm.log.sql=true
-
 %prod.quarkus.kubernetes-client.trust-certs=true<1>
 %prod.quarkus.container-image.build=true<2>
 %prod.quarkus.kubernetes.deploy=true<3>
@@ -436,7 +410,7 @@ Build and deploy the `people` application via running the following maven plugin
 
 [source,sh,role="copypaste"]
 ----
-mvn clean package -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
+mvn clean package -Duser.home=/home/jboss -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
 ----
 
 **Wait for it to finish!**. You should get a **BUILD SUCCESS** message at the end. Once that's done, make sure it's actually done rolling out:
