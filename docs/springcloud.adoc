@@ -22,7 +22,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: myconfigmap
-  namespace: {{ USER_ID }}-project
+  namespace: {{ USER_ID }}-codeready
 data:
   message.hello.quarkus: Kubernetes Native Java, Quarkus
 ----
