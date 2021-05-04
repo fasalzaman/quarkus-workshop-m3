@@ -318,7 +318,9 @@ image::remain-microservices.png[quarkus, 600]
 
 == Deploy to PostgreSQL in Production
 
-Our production environment needs a "real" database so let's update the Postgres database connection details (JDBC url, database credentials) which are specified in `application.properties`. So you'll update the below details now:
+Our production environment needs a "real" database so let's add existing Azure Postgres database details like connection string, username and password details (JDBC url, database credentials) to `application.properties` file. So you'll add below details now:
+
+Append the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-vets-service` project:
 
 [source,shell,role="copypaste"]
 ----
@@ -333,7 +335,7 @@ Our production environment needs a "real" database so let's update the Postgres 
 %prod.quarkus.hibernate-orm.log.sql=true
 ----
 
-By this you will connect the database to our new project. 
+By this variables you will connect the database to our new project. 
 
 == Login to OpenShift
 
@@ -406,6 +408,56 @@ Append the following variables in `src/main/resources/application.properties` wi
 <5> Instructs the extension to generate an OpenShift `Route`.
 <6> Adds a nice-looking icon to the app when viewing the OpenShift Developer Toplogy
 
+Append the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-customers-service` project:
+
+[source,shell,role="copypaste"]
+----
+%prod.quarkus.datasource.url=jdbc:postgresql://customers-database:5432/customers
+%prod.quarkus.datasource.driver=org.postgresql.Driver
+%prod.quarkus.datasource.username=customers
+%prod.quarkus.datasource.password=mysecretpassword
+%prod.quarkus.datasource.max-size=8
+%prod.quarkus.datasource.min-size=2
+%prod.quarkus.hibernate-orm.database.generation=drop-and-create
+%prod.quarkus.hibernate-orm.sql-load-script=import.sql
+%prod.quarkus.hibernate-orm.log.sql=true
+
+%prod.quarkus.kubernetes-client.trust-certs=true
+%prod.quarkus.container-image.build=true
+%prod.quarkus.kubernetes.deploy=true
+%prod.quarkus.kubernetes.deployment-target=openshift
+%prod.quarkus.openshift.expose=true
+%prod.quarkus.openshift.labels.app.openshift.io/runtime=quarkus
+%prod.quarkus.openshift.part-of=customers-app
+%prod.quarkus.openshift.component=rest-api
+%prod.quarkus.openshift.annotations."app.openshift.io/connects-to"=customers-database
+----
+
+Append the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-visits-service` project:
+
+[source,shell,role="copypaste"]
+----
+%prod.quarkus.datasource.url=jdbc:postgresql://visits-database:5432/visits
+%prod.quarkus.datasource.driver=org.postgresql.Driver
+%prod.quarkus.datasource.username=visits
+%prod.quarkus.datasource.password=mysecretpassword
+%prod.quarkus.datasource.max-size=8
+%prod.quarkus.datasource.min-size=2
+%prod.quarkus.hibernate-orm.database.generation=drop-and-create
+%prod.quarkus.hibernate-orm.sql-load-script=import.sql
+%prod.quarkus.hibernate-orm.log.sql=true
+
+%prod.quarkus.kubernetes-client.trust-certs=true
+%prod.quarkus.container-image.build=true
+%prod.quarkus.kubernetes.deploy=true
+%prod.quarkus.kubernetes.deployment-target=openshift
+%prod.quarkus.openshift.expose=true
+%prod.quarkus.openshift.labels.app.openshift.io/runtime=quarkus
+%prod.quarkus.openshift.part-of=visits-app
+%prod.quarkus.openshift.component=rest-api
+%prod.quarkus.openshift.annotations."app.openshift.io/connects-to"=visits-database
+----
+
 Build and deploy the `people` application via running the following maven plugin in CodeReady Workspaces Terminal:
 
 [source,sh,role="copypaste"]
@@ -459,13 +511,6 @@ The output looks like:
 ]
 ----
 
-And label the items with proper icons:
-
-[source,sh,role="copypaste"]
-----
-oc label dc/vets-database app.openshift.io/runtime=postgresql --overwrite && \
-oc label dc/vets-database app.kubernetes.io/part-of=vets-app --overwrite
-----
 
 This will deploy the new vets service to our new project. Click on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-project[Topology View^] to see it:
 
