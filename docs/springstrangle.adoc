@@ -412,10 +412,10 @@ Append the following variables in `src/main/resources/application.properties` wi
 
 [source,shell,role="copypaste"]
 ----
-%prod.quarkus.datasource.url=jdbc:postgresql://customers-database:5432/customers
+%prod.quarkus.datasource.url=jdbc:postgresql://coolstore1.postgres.database.azure.com:5432/customers
 %prod.quarkus.datasource.driver=org.postgresql.Driver
-%prod.quarkus.datasource.username=customers
-%prod.quarkus.datasource.password=mysecretpassword
+%prod.quarkus.datasource.username=demouser@coolstore1
+%prod.quarkus.datasource.password=demo@pass123
 %prod.quarkus.datasource.max-size=8
 %prod.quarkus.datasource.min-size=2
 %prod.quarkus.hibernate-orm.database.generation=drop-and-create
@@ -437,10 +437,10 @@ Append the following variables in `src/main/resources/application.properties` wi
 
 [source,shell,role="copypaste"]
 ----
-%prod.quarkus.datasource.url=jdbc:postgresql://visits-database:5432/visits
+%prod.quarkus.datasource.url=jdbc:postgresql://coolstore1.postgres.database.azure.com:5432/visits
 %prod.quarkus.datasource.driver=org.postgresql.Driver
-%prod.quarkus.datasource.username=visits
-%prod.quarkus.datasource.password=mysecretpassword
+%prod.quarkus.datasource.username=demouser@coolstore1
+%prod.quarkus.datasource.password=demo@pass123
 %prod.quarkus.datasource.max-size=8
 %prod.quarkus.datasource.min-size=2
 %prod.quarkus.hibernate-orm.database.generation=drop-and-create
