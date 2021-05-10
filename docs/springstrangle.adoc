@@ -408,7 +408,7 @@ Append the following variables in `src/main/resources/application.properties` wi
 <5> Instructs the extension to generate an OpenShift `Route`.
 <6> Adds a nice-looking icon to the app when viewing the OpenShift Developer Toplogy
 
-Append the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-customers-service` project:
+Replace the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-customers-service` project:
 
 [source,shell,role="copypaste"]
 ----
@@ -433,7 +433,7 @@ Append the following variables in `src/main/resources/application.properties` wi
 %prod.quarkus.openshift.annotations."app.openshift.io/connects-to"=customers-database
 ----
 
-Append the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-visits-service` project:
+Replace the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-visits-service` project:
 
 [source,shell,role="copypaste"]
 ----
