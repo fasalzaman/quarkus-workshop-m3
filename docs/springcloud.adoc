@@ -220,7 +220,7 @@ You can define separate readiness and liveness probes using `@Liveness` and `@Re
 
 Back on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-codeready[Topology View^] and click on `DC(customers-service)` then select `Edit Health Checks` in *Actions* dropbox:
 
-image::M3-coustmers-health-check.PNG[health, 700]
+image::M3-coustmers-health-check.PNG[health, 800]
 
 You should see `Readiness Probe` and `Liveness Probe` are already added along with Quarkus MicroProfile health specification:
 
