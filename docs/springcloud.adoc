@@ -10,7 +10,7 @@ A frequently asked question is *how does Quarkus with OpenShift handle the Sprin
 
 Quarkus includes the https://quarkus.io/guides/kubernetes-config[kubernetes-config^] extension, which allows developers to use Kubernetes https://cloud.google.com/kubernetes-engine/docs/concepts/configmap[ConfigMaps^] and https://cloud.google.com/kubernetes-engine/docs/concepts/secret[Secrets^] as configuration sources, without having to mount them into the Pod running the Quarkus application. This *configuration management* traditionally can be managed by https://spring.io/projects/spring-cloud-config[Spring Cloud Config^] and https://www.consul.io/[Consul^].
 
-In this step, we'll use a ConfigMap to handle this capability. Go to the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-project/configmaps[Config Maps^] in Developer Console, then click on `Create Config Map`:
+In this step, we'll use a ConfigMap to handle this capability. Go to the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-codeready/configmaps[Config Maps^] in Developer Console, then click on `Create Config Map`:
 
 image::create-configmap.png[configmap.png, 900]
 
@@ -88,7 +88,7 @@ Also, don’t forget to add the import statement by adding the import statement 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 ----
 
-Let's modify the Qute template to show the message that refers to OpenShift ConfigMap. Open `welcome.html` file in `src/main/resources/templates` of *quarkus-petclinic-web-v2* project, and replace the following code:
+Let's modify the Qute template to show the message that refers to OpenShift ConfigMap. Open `welcome.html` file in `src/main/resources/templates` of *quarkus-petclinic-web-v2* project, and replace the following code at `h2` tag:
 
 [source,html,role="copypaste"]
 ----
@@ -109,7 +109,7 @@ When the build and deployment complete, the app will be rolled out to OpenShift.
 oc rollout status -w dc/petclinic-web-v2
 ----
 
-Once the rollout is complete, back on the http://petclinic-web-v2-{{ USER_ID }}-project.{{ ROUTE_SUBDOMAIN}}[Welcome Page^] then you shoud see this:
+Once the rollout is complete, back on the http://petclinic-web-v2-{{ USER_ID }}-codeready.{{ ROUTE_SUBDOMAIN}}[Welcome Page^] then you shoud see this:
 
 image::quarkus-welcome-configmap.png[configmap.png, 900]
 
@@ -218,9 +218,9 @@ You now see the default health check, along with your new customer (owner) healt
 You can define separate readiness and liveness probes using `@Liveness` and `@Readiness` annotations and access them separately at `/health/live` and `/health/ready`.
 ====
 
-Back on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-project[Topology View^] and click on `DC(customers-service)` then select `Edit Health Checks` in *Actions* dropbox:
+Back on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-codeready[Topology View^] and click on `DC(customers-service)` then select `Edit Health Checks` in *Actions* dropbox:
 
-image::customers-dc.png[health.png, 900]
+image::M3-coustmers-health-check.PNG[health, 800]
 
 You should see `Readiness Probe` and `Liveness Probe` are already added along with Quarkus MicroProfile health specification:
 

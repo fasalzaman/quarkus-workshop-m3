@@ -408,7 +408,7 @@ Append the following variables in `src/main/resources/application.properties` wi
 <5> Instructs the extension to generate an OpenShift `Route`.
 <6> Adds a nice-looking icon to the app when viewing the OpenShift Developer Toplogy
 
-Append the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-customers-service` project:
+Replace the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-customers-service` project:
 
 [source,shell,role="copypaste"]
 ----
@@ -433,7 +433,7 @@ Append the following variables in `src/main/resources/application.properties` wi
 %prod.quarkus.openshift.annotations."app.openshift.io/connects-to"=customers-database
 ----
 
-Append the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-visits-service` project:
+Replace the following variables in `src/main/resources/application.properties` within the `quarkus-petclinic-visits-service` project:
 
 [source,shell,role="copypaste"]
 ----
@@ -462,7 +462,7 @@ Build and deploy the `people` application via running the following maven plugin
 
 [source,sh,role="copypaste"]
 ----
-mvn clean package -Duser.home=/home/jboss -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
+mvn clean package -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
 ----
 
 **Wait for it to finish!**. You should get a **BUILD SUCCESS** message at the end. Once that's done, make sure it's actually done rolling out:
@@ -512,9 +512,71 @@ The output looks like:
 ----
 
 
-This will deploy the new vets service to our new project. Click on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-project[Topology View^] to see it:
+This will deploy the new vets service to our new project. Click on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-codeready[Topology View^] to see it:
 
-image::vets-deployment.png[inventory_db_deployments, 700]
+Let's update the script files before deploying microservices(_Visits_, _Customers_, _Web_) to OpenShift.
+
+Replace entire code in `scripts/deploy-customers-service.sh` within the `quarkus-workshop-m3-labs` root directory with below code:
+
+[source, shell, role="copypaste"]
+----
+#!/bin/bash
+
+echo Deploy customers-service........
+
+oc delete all -l app=customers-database
+
+
+mvn clean package -DskipTests -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-customers-service
+
+oc label deployment/customers-database app.openshift.io/runtime=postgresql --overwrite && \
+oc label deployment/customers-database app.kubernetes.io/part-of=customers-app --overwrite
+----
+
+Replace entire code in `scripts/deploy-vets-service.sh` within the `quarkus-workshop-m3-labs` root directory with below code:
+
+[source, shell, role="copypaste"]
+----
+#!/bin/bash
+
+echo Deploy vets-service........
+
+oc delete all -l app=vets-database
+
+
+mvn clean package -DskipTests -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-vets-service
+
+oc label deployment/vets-database app.openshift.io/runtime=postgresql --overwrite && \
+oc label deployment/vets-database app.kubernetes.io/part-of=vets-app --overwrite
+----
+
+Replace entire code in `scripts/deploy-visits-service.sh` within the `quarkus-workshop-m3-labs` root directory with below code:
+
+[source, shell, role="copypaste"]
+----
+#!/bin/bash
+
+echo Deploy visits-service........
+
+oc delete all -l app=visits-database
+
+
+mvn clean package -DskipTests -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-visits-service
+
+oc label deployment/visits-database app.openshift.io/runtime=postgresql --overwrite && \
+oc label deployment/visits-database app.kubernetes.io/part-of=visits-app --overwrite
+----
+
+Replace entire code in `scripts/deploy-petclinic-web-v2.sh` within the `quarkus-workshop-m3-labs` root directory with below code:
+
+[source, shell, role="copypaste"]
+----
+#!/bin/bash
+
+echo Deploy deploy-petclinic-web-v2........
+
+mvn clean package -DskipTests -Duser.home=/home/jboss -f $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/quarkus-petclinic-web-v2
+----
 
 *Great job!* Let's build and deploy the remaining microservices(_Visits_, _Customers_, _Web_) to OpenShift by executing the following shell script in a CodeReady Workspaces Terminal:
 
@@ -532,13 +594,13 @@ sh $CHE_PROJECTS_ROOT/quarkus-workshop-m3-labs/scripts/deploy-visits-service.sh
 
 Wait for the script to complete before continuing. It normally takes a few minutes to deploy 3 applications and databases to OpenShift.
 
-When the script completes, the app is deployed to OpenShift. Back on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-project[Topology View^], make sure it's done deploying (dark blue circle):
+When the script completes, the app is deployed to OpenShift. Back on the {{ CONSOLE_URL }}/topology/ns/{{ USER_ID }}-codeready[Topology View^], make sure it's done deploying (dark blue circle):
 
-image::topology-view.png[topology-view.png, 900]
+image::M3-script-deploy.PNG[topology-view, 700]
 
 Click on `Open URL` then you will see the landing page of Quarkus Petclinic application based on microservices. 
 
-Let's do a quick sanity test if new microservices are working well. Click on http://petclinic-web-v2-{{ USER_ID }}-project.{{ ROUTE_SUBDOMAIN}}/owners?id=6[Jean Coleman Information^] then you shoud see this:
+Let's do a quick sanity test if new microservices are working well. Click on http://petclinic-web-v2-{{ USER_ID }}-codeready.{{ ROUTE_SUBDOMAIN}}/owners?id=6[Jean Coleman Information^] then you shoud see this:
 
 image::owners-detail-view.png[owners-detail-view.png, 900]
 

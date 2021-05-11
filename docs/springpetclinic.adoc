@@ -106,6 +106,12 @@ The project is imported into your workspace and is visible in the project explor
 
 image::crw-clone-explorer-spring.png[crw,900]
 
+### Switching Java language server to Standard mode
+
+On the right side bottom end you will find a Rocket icon which shows that Java language server running in light-weight mode, Click on the rocket icon and select `Yes`  in the popup window to switch to Standard Mode.
+
+image::Java-mode.png[]
+
 == Running the Spring Petclinic
 
 Let's run the Spring Petclinic application. in a CodeReady Terminal:
